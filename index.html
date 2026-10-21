@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080d17">
 <title>Роби — мой помощник</title>
+
 <style>
 :root {
   --bg:#080d17;
@@ -22,34 +23,34 @@ body {
 header {
   height:66px;position:sticky;top:0;z-index:10;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;background:#080d17;
+  padding:0 16px;background:var(--bg);
   border-bottom:1px solid #203149;
 }
-.brand { font-size:24px;font-weight:850;letter-spacing:3px }
+.brand {font-size:24px;font-weight:850;letter-spacing:3px}
 button {
   cursor:pointer;padding:11px 14px;border-radius:12px;
   color:var(--text);background:#142a40;
-  border:1px solid #29445e;
+  border:1px solid #29445e;font:inherit;
 }
-button:hover { border-color:var(--glow) }
-.icon { font-size:22px;color:var(--glow) }
-main { max-width:800px;margin:auto;padding:22px 15px 60px }
-h1 { font-size:28px }
-h2 { font-size:23px }
+button:hover {border-color:var(--glow)}
+button:disabled {opacity:.45;cursor:not-allowed}
+.icon {font-size:22px;color:var(--glow)}
+main {max-width:800px;margin:auto;padding:22px 15px 60px}
+h1 {font-size:28px}
+h2 {font-size:23px}
 .card {
   padding:17px;margin:12px 0;border-radius:17px;
   background:var(--panel);border:1px solid #203149;
 }
-.muted { color:var(--muted);font-size:14px;line-height:1.6 }
-.primary { width:100%;background:#12344b;border-color:var(--glow) }
+.muted {color:var(--muted);font-size:14px;line-height:1.6}
+.primary {width:100%;background:#12344b;border-color:var(--glow)}
 input,textarea,select {
   width:100%;padding:12px;margin:7px 0 12px;
   background:#091321;color:white;
-  border:1px solid #29445e;border-radius:10px;
-  font:inherit;
+  border:1px solid #29445e;border-radius:10px;font:inherit;
 }
-textarea { min-height:100px;resize:vertical }
-.hidden { display:none!important }
+textarea {min-height:90px;resize:vertical}
+.hidden {display:none!important}
 #shade {
   position:fixed;inset:66px 0 0;background:#0009;z-index:11;
 }
@@ -58,14 +59,17 @@ textarea { min-height:100px;resize:vertical }
   width:min(330px,88vw);overflow:auto;
   background:#0b1321;padding:12px;border-right:1px solid #294059;
 }
-.nav { display:block;width:100%;text-align:left;margin:4px 0;background:transparent;border-color:transparent }
-.nav.active { background:#142a40;border-color:#29445e }
-.nav span { color:var(--glow);display:inline-block;width:30px }
-.robot-area { text-align:center;padding:10px 0 25px }
+.nav {
+  display:block;width:100%;text-align:left;margin:4px 0;
+  background:transparent;border-color:transparent;
+}
+.nav.active {background:#142a40;border-color:#29445e}
+.nav span {color:var(--glow);display:inline-block;width:30px}
+.robot-area {text-align:center;padding:10px 0 25px}
 .orb {
   width:min(68vw,270px);aspect-ratio:1;margin:22px auto;
   border-radius:50%;display:grid;place-items:center;
-  position:relative;cursor:pointer;
+  position:relative;
   background:radial-gradient(circle at 28% 20%,#fff,#dcecf9 20%,#91afca 48%,#344e6b 80%,#15283d);
   box-shadow:0 0 25px var(--glow),0 0 70px #55dfff35,inset -15px -18px 28px #07101d;
   animation:float 3s ease-in-out infinite;
@@ -88,25 +92,37 @@ textarea { min-height:100px;resize:vertical }
   position:absolute;bottom:-35%;width:26%;height:4px;
   border-radius:50%;background:var(--glow);
 }
-.sleeping .eye { height:3px;animation:none }
-.sleeping .mouth { height:3px }
-.speaking .mouth { height:13px;animation:talk .2s infinite alternate }
-@keyframes float { 50% { transform:translateY(-6px) } }
-@keyframes blink {
-  0%,43%,47%,85%,100% { transform:scaleY(1) }
-  45%,87% { transform:scaleY(.06) }
+.sleeping .eye {height:3px;animation:none}
+.listening {
+  box-shadow:0 0 35px var(--glow),0 0 100px #55dfff70;
+  animation:pulse 1.3s ease-in-out infinite;
 }
-@keyframes talk { to { height:4px;width:18% } }
-.chatmsg { padding:12px;margin:8px 0;border-radius:12px;overflow-wrap:anywhere;white-space:pre-wrap }
-.user { background:#1b354c;margin-left:12% }
-.bot { background:#172332;margin-right:8% }
-.item { padding:12px 0;border-bottom:1px solid #28394d }
-.swatches { display:flex;gap:12px;flex-wrap:wrap }
-.swatch { width:36px;height:36px;border-radius:50%;padding:0 }
-.preview { width:100%;height:300px;background:white;border-radius:12px }
-footer { text-align:center;padding:20px;color:#627991;font-size:12px }
+.speaking .mouth {height:13px;animation:talk .2s infinite alternate}
+.listening .eye {animation:eyeListen .7s infinite alternate}
+@keyframes float {50%{transform:translateY(-6px)}}
+@keyframes blink {
+  0%,43%,47%,85%,100%{transform:scaleY(1)}
+  45%,87%{transform:scaleY(.06)}
+}
+@keyframes talk {to{height:4px;width:18%}}
+@keyframes pulse {50%{transform:scale(1.04)}}
+@keyframes eyeListen {to{transform:scaleY(.6)}}
+.chatmsg {
+  padding:12px;margin:8px 0;border-radius:12px;
+  overflow-wrap:anywhere;white-space:pre-wrap;text-align:left;
+}
+.user {background:#1b354c;margin-left:12%}
+.bot {background:#172332;margin-right:8%}
+.item {padding:12px 0;border-bottom:1px solid #28394d}
+.swatches {display:flex;gap:12px;flex-wrap:wrap}
+.swatch {width:36px;height:36px;border-radius:50%;padding:0}
+.controls {display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.controls button {min-width:125px}
+.status {color:var(--glow);min-height:25px}
+footer {text-align:center;padding:20px;color:#627991;font-size:12px}
 </style>
 </head>
+
 <body>
 <header>
   <button class="icon" id="menuBtn" aria-label="Открыть меню">☰</button>
@@ -121,157 +137,557 @@ footer { text-align:center;padding:20px;color:#627991;font-size:12px }
 
 <script>
 "use strict";
+
 const $ = s => document.querySelector(s);
+
 const pages = [
- ["Главная","⌂"],["Новый чат","＋"],["Голосовой чат","♫"],
- ["История чатов","◷"],["Проекты","▣"],
- ["Создание фото и видео","▧"],["Редактор фото и видео","✎"],
- ["Приложения и доступ","◇"],["Создание сайтов","⌘"],
+ ["Главная","⌂"],
+ ["Новый чат","＋"],
+ ["Голосовой чат","♫"],
+ ["История чатов","◷"],
+ ["Проекты","▣"],
+ ["Создание фото и видео","▧"],
+ ["Редактор фото и видео","✎"],
+ ["Приложения и доступ","◇"],
+ ["Создание сайтов","⌘"],
  ["Настройки Роби","⚙"]
 ];
-function read(k,f=[]){
- try { return JSON.parse(localStorage.getItem("robi."+k)) ?? f }
- catch { return f }
+
+function read(k, fallback=[]) {
+  try {
+    return JSON.parse(localStorage.getItem("robi."+k)) ?? fallback;
+  } catch {
+    return fallback;
+  }
 }
-function save(k,v){localStorage.setItem("robi."+k,JSON.stringify(v))}
-function esc(s=""){
- return String(s).replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- })[c])
+
+function save(k,v) {
+  localStorage.setItem("robi."+k,JSON.stringify(v));
 }
+
+function esc(s="") {
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
 let page="Главная";
 let sleep=false;
 let glow=localStorage.getItem("robi.glow")||"#55dfff";
 let chats=read("chats");
 let projects=read("projects");
 let sites=read("sites");
-let features=read("features",[
- {id:1,name:"Общение с ИИ",desc:"Диалог с Роби",on:true},
- {id:2,name:"Голосовой чат",desc:"Голосовое управление",on:true},
- {id:3,name:"Анимация робота",desc:"Моргание и сон",on:true}
-]);
 let commands=read("commands");
-let activeChat=null,editFeature=null,editSite=null;
+let features=read("features",[
+  {id:1,name:"Общение с ИИ",desc:"Диалог с Роби",on:true},
+  {id:2,name:"Голосовой чат",desc:"Голосовое управление",on:true},
+  {id:3,name:"Анимация робота",desc:"Моргание и сон",on:true}
+]);
 
-function persist(){
- save("chats",chats);save("projects",projects);
- save("sites",sites);save("features",features);save("commands",commands);
-}
-function openMenu(show){
- $("#menu").classList.toggle("hidden",!show);
- $("#shade").classList.toggle("hidden",!show);
-}
-function go(p){page=p;openMenu(false);render()}
-function robot(){
- return `<div class="orb ${sleep?"sleeping":""}" id="orb" role="button" tabindex="0" aria-label="Усыпить или разбудить Роби"><div class="face"><div class="eye"></div><div class="eye"></div><div class="mouth"></div></div></div>`;
-}
-function render(){
- document.documentElement.style.setProperty("--glow",glow);
- $("#menu").innerHTML=pages.map(([p,ic])=>
-  `<button class="nav ${page===p?"active":""}" data-page="${esc(p)}"><span>${ic}</span>${esc(p)}</button>`
- ).join("");
- const app=$("#app");
+let activeChat=null;
+let editFeature=null;
+let editSite=null;
 
- if(page==="Главная"){
-  app.innerHTML=`<section class="robot-area">${robot()}<h1>${sleep?"Роби спит":"Привет! Я Роби"}</h1><p class="muted">${sleep?"Нажми на меня, чтобы проснуться":"Я готов помочь. С чего начнём?"}</p><button class="primary" id="newChat">＋ Добавить новый чат</button></section>`;
-  $("#orb").onclick=()=>{sleep=!sleep;render()};
-  $("#orb").onkeydown=e=>{if(e.key==="Enter"){sleep=!sleep;render()}};
- }
- else if(page==="Настройки Роби"){
-  app.innerHTML=`<h2>Настройки Роби</h2>
-  <section class="card"><h3>Неоновое свечение</h3><div class="swatches">${["#55dfff","#a88bff","#5ce6ae","#ff80c0","#ffb454"].map(c=>`<button class="swatch" data-color="${c}" style="background:${c}"></button>`).join("")}</div></section>
-  <h2>Мои функции</h2><section class="card">${features.map(f=>`<div class="item"><strong>${esc(f.name)}</strong><p class="muted">${esc(f.desc)}</p><button data-toggle="${f.id}">${f.on?"Выключить":"Включить"}</button> <button data-edit="${f.id}">Изменить</button> <button data-del="${f.id}">Удалить</button></div>`).join("")||"Функций нет."}</section>
-  <section class="card"><h3>${editFeature?"Изменить функцию":"Добавить функцию"}</h3><form id="featureForm"><input id="fn" placeholder="Название функции" required><textarea id="fd" placeholder="Описание функции" required></textarea><button class="primary">Сохранить</button></form></section>
-  <section class="card"><h3>Научи Роби новой команде</h3><form id="commandForm"><textarea id="cmd" placeholder="Какую команду должен освоить Роби?" required></textarea><button class="primary">Сохранить команду</button></form>${commands.map((c,i)=>`<div class="item">${esc(c)} <button data-cmd-del="${i}">Удалить</button></div>`).join("")}</section>`;
-  if(editFeature){let f=features.find(x=>x.id===editFeature);if(f){$("#fn").value=f.name;$("#fd").value=f.desc}}
- }
- else if(page==="Новый чат"){
-  let c=chats.find(x=>x.id===activeChat);
-  if(!c){c={id:String(Date.now()),name:"Новый чат",messages:[]};chats.unshift(c);activeChat=c.id;persist()}
-  app.innerHTML=`<h2>${esc(c.name)}</h2><section class="card">${c.messages.map(m=>`<div class="chatmsg ${m.role==="user"?"user":"bot"}"><b>${m.role==="user"?"Ты":"Роби"}</b><div>${esc(m.text)}</div></div>`).join("")||'<p class="muted">Напиши первое сообщение.</p>'}</section><form id="chatForm"><textarea id="msg" placeholder="Сообщение для Роби..." required></textarea><button class="primary">Отправить →</button></form><p class="muted">Для ответов настоящего ИИ необходимо подключить сервер.</p>`;
- }
- else if(page==="История чатов"){
-  app.innerHTML=`<h2>История чатов</h2><section class="card">${chats.map(c=>`<div class="item"><button data-open="${c.id}">${esc(c.name)} (${c.messages.length})</button> <button data-chat-del="${c.id}">Удалить</button></div>`).join("")||"История пуста."}</section><button id="newChat" class="primary">＋ Новый чат</button>`;
- }
- else if(page==="Проекты"){
-  app.innerHTML=`<h2>Проекты</h2><section class="card"><form id="projectForm"><input id="pn" placeholder="Название проекта" required><button class="primary">Создать</button></form>${projects.map((p,i)=>`<div class="item">${esc(p)} <button data-project-del="${i}">Удалить</button></div>`).join("")}</section>`;
- }
- else if(page==="Создание сайтов"){
-  app.innerHTML=`<h2>Создание сайтов</h2><section class="card"><form id="siteForm"><input id="sn" placeholder="Название сайта" required><textarea id="sd" placeholder="Описание сайта"></textarea><button class="primary">Создать проект</button></form></section><section class="card"><h3>Мои сайты</h3>${sites.map((s,i)=>`<div class="item"><b>${esc(s.name)}</b><p>${esc(s.desc)}</p><button data-site-open="${i}">Редактировать</button> <button data-site-del="${i}">Удалить</button></div>`).join("")}</section><section class="card" id="editor"><h3>HTML-редактор</h3><textarea id="code"><!doctype html><html><body><h1>Мой сайт</h1><p>Добро пожаловать!</p></body></html></textarea><button class="primary" id="previewBtn">Предпросмотр</button><iframe class="preview" id="preview" sandbox="allow-forms"></iframe></section>`;
- }
- else if(page==="Приложения и доступ"){
-  app.innerHTML=`<h2>Приложения и доступ</h2><section class="card"><h3>Микрофон</h3><p class="muted">Браузер запросит разрешение.</p><button id="mic">Запросить доступ</button><p id="status" class="muted"></p></section><section class="card"><h3>Выбор файлов</h3><p class="muted">Браузер не разрешает сайтам просматривать все установленные приложения телефона.</p><input id="files" type="file" multiple><p id="fileStatus"></p></section>`;
- }
- else if(page==="Голосовой чат"){
-  app.innerHTML=`<section class="robot-area">${robot()}<h2>Голосовой чат</h2><p class="muted">Нажми кнопку и произнеси фразу.</p><button class="primary" id="voice">🎙 Начать голосовой ввод</button><p id="voiceStatus" class="muted"></p><div id="transcript"></div></section>`;
- }
- else {
-  app.innerHTML=`<h2>${esc(page)}</h2><section class="card"><p class="muted">Выбери файл для просмотра. Генерация и редактирование ИИ требуют подключения специальных сервисов.</p><input id="media" type="file" accept="image/*,video/*"><div id="mediaPreview"></div></section>`;
- }
+let voiceActive=false;
+let voiceRecognition=null;
+let voiceSpeaking=false;
+let voiceLines=[];
+let voiceGeneration=0;
+
+function persist() {
+  save("chats",chats);
+  save("projects",projects);
+  save("sites",sites);
+  save("features",features);
+  save("commands",commands);
 }
-function newChat(){activeChat=null;go("Новый чат")}
+
+function openMenu(show) {
+  $("#menu").classList.toggle("hidden",!show);
+  $("#shade").classList.toggle("hidden",!show);
+}
+
+function stopVoice(silent=false) {
+  voiceActive=false;
+  voiceSpeaking=false;
+  voiceGeneration++;
+
+  const r=voiceRecognition;
+  voiceRecognition=null;
+
+  if(r) {
+    r.onend=null;
+    r.onresult=null;
+    r.onerror=null;
+    try { r.abort(); } catch {}
+  }
+
+  if("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+  }
+
+  $("#orb")?.classList.remove("listening","speaking");
+
+  const btn=$("#voice");
+  if(btn) btn.textContent="🎙 Начать разговор";
+
+  const stop=$("#voiceStop");
+  if(stop) stop.disabled=true;
+
+  if(!silent) setStatus("Разговор завершён.");
+}
+
+function go(p) {
+  if(page==="Голосовой чат" && p!=="Голосовой чат") {
+    stopVoice(true);
+  }
+  page=p;
+  openMenu(false);
+  render();
+}
+
+function robot() {
+  return `
+    <div class="orb ${sleep?"sleeping":""}" id="orb"
+      role="img" aria-label="Робот Роби">
+      <div class="face">
+        <div class="eye"></div>
+        <div class="eye"></div>
+        <div class="mouth"></div>
+      </div>
+    </div>`;
+}
+
+function setStatus(text) {
+  const el=$("#voiceStatus");
+  if(el) el.textContent=text;
+}
+
+function showVoiceLines() {
+  const el=$("#transcript");
+  if(!el) return;
+
+  el.innerHTML=voiceLines.map(line=>`
+    <div class="chatmsg ${line.role==="user"?"user":"bot"}">
+      <b>${line.role==="user"?"Ты":"Роби"}</b>
+      <div>${esc(line.text)}</div>
+    </div>`).join("");
+
+  el.scrollTop=el.scrollHeight;
+}
+
+function render() {
+  document.documentElement.style.setProperty("--glow",glow);
+
+  $("#menu").innerHTML=pages.map(([p,ic])=>`
+    <button class="nav ${page===p?"active":""}" data-page="${esc(p)}">
+      <span>${ic}</span>${esc(p)}
+    </button>`).join("");
+
+  const app=$("#app");
+
+  if(page==="Главная") {
+    app.innerHTML=`
+      <section class="robot-area">
+        ${robot()}
+        <h1>${sleep?"Роби спит":"Привет! Я Роби"}</h1>
+        <p class="muted">${sleep?"Нажми на меня, чтобы проснуться":"Я готов помочь. С чего начнём?"}</p>
+        <button class="primary" id="newChat">＋ Новый чат</button>
+        <button class="primary" id="openVoice" style="margin-top:10px">🎙 Голосовой режим</button>
+      </section>`;
+
+    $("#orb").onclick=()=>{
+      sleep=!sleep;
+      render();
+    };
+  }
+
+  else if(page==="Голосовой чат") {
+    app.innerHTML=`
+      <section class="robot-area">
+        ${robot()}
+        <h2>Голосовой чат</h2>
+        <p class="muted">Нажми кнопку и говори с Роби на русском языке.</p>
+        <div class="controls">
+          <button class="primary" id="voice">
+            ${voiceActive?"Ⅱ Приостановить":"🎙 Начать разговор"}
+          </button>
+          <button id="voiceStop" ${voiceActive?"":"disabled"}>■ Завершить</button>
+        </div>
+        <p id="voiceStatus" class="status" aria-live="polite">
+          ${voiceActive?"Голосовой режим включён":"Нажми «Начать разговор»"}
+        </p>
+        <section class="card" id="transcript" aria-live="polite">
+          ${voiceLines.length?"":"<p class='muted'>Здесь появится расшифровка разговора.</p>"}
+        </section>
+        <p class="muted">Демо-режим: для интеллектуальных ответов нужно подключить ИИ.</p>
+      </section>`;
+
+    showVoiceLines();
+    $("#voice").onclick=()=>voiceActive?pauseVoice():startVoice();
+    $("#voiceStop").onclick=()=>stopVoice();
+  }
+
+  else if(page==="Настройки Роби") {
+    app.innerHTML=`
+      <h2>Настройки Роби</h2>
+      <section class="card">
+        <h3>Неоновое свечение</h3>
+        <div class="swatches">
+          ${["#55dfff","#a88bff","#5ce6ae","#ff80c0","#ffb454"].map(c=>`
+            <button class="swatch" data-color="${c}" style="background:${c}"></button>
+          `).join("")}
+        </div>
+      </section>
+      <section class="card">
+        <h3>Мои функции</h3>
+        ${features.map(f=>`
+          <div class="item">
+            <b>${esc(f.name)}</b>
+            <p class="muted">${esc(f.desc)}</p>
+            <button data-toggle="${f.id}">${f.on?"Выключить":"Включить"}</button>
+            <button data-edit="${f.id}">Изменить</button>
+            <button data-del="${f.id}">Удалить</button>
+          </div>
+        `).join("")}
+      </section>
+      <section class="card">
+        <h3>${editFeature?"Изменить функцию":"Добавить функцию"}</h3>
+        <form id="featureForm">
+          <input id="fn" placeholder="Название функции" required>
+          <textarea id="fd" placeholder="Описание функции" required></textarea>
+          <button class="primary">Сохранить</button>
+        </form>
+      </section>
+      <section class="card">
+        <h3>Команды Роби</h3>
+        <form id="commandForm">
+          <textarea id="cmd" placeholder="Новая команда" required></textarea>
+          <button class="primary">Сохранить команду</button>
+        </form>
+        ${commands.map((c,i)=>`
+          <div class="item">${esc(c)}
+            <button data-cmd-del="${i}">Удалить</button>
+          </div>
+        `).join("")}
+      </section>`;
+
+    if(editFeature) {
+      const f=features.find(x=>x.id===editFeature);
+      if(f) {
+        $("#fn").value=f.name;
+        $("#fd").value=f.desc;
+      }
+    }
+  }
+
+  else if(page==="Новый чат") {
+    let c=chats.find(x=>x.id===activeChat);
+
+    if(!c) {
+      c={id:String(Date.now()),name:"Новый чат",messages:[]};
+      chats.unshift(c);
+      activeChat=c.id;
+      persist();
+    }
+
+    app.innerHTML=`
+      <h2>${esc(c.name)}</h2>
+      <section class="card">
+        ${c.messages.map(m=>`
+          <div class="chatmsg ${m.role==="user"?"user":"bot"}">
+            <b>${m.role==="user"?"Ты":"Роби"}</b>
+            <div>${esc(m.text)}</div>
+          </div>
+        `).join("")||'<p class="muted">Напиши первое сообщение.</p>'}
+      </section>
+      <form id="chatForm">
+        <textarea id="msg" placeholder="Сообщение для Роби..." required></textarea>
+        <button class="primary">Отправить →</button>
+      </form>
+      <p class="muted">Для интеллектуальных ответов необходимо подключить ИИ.</p>`;
+  }
+
+  else if(page==="История чатов") {
+    app.innerHTML=`
+      <h2>История чатов</h2>
+      <section class="card">
+        ${chats.map(c=>`
+          <div class="item">
+            <button data-open="${c.id}">${esc(c.name)} (${c.messages.length})</button>
+            <button data-chat-del="${c.id}">Удалить</button>
+          </div>
+        `).join("")||"История пуста."}
+      </section>
+      <button class="primary" id="newChat">＋ Новый чат</button>`;
+  }
+
+  else if(page==="Проекты") {
+    app.innerHTML=`
+      <h2>Проекты</h2>
+      <section class="card">
+        <form id="projectForm">
+          <input id="pn" placeholder="Название проекта" required>
+          <button class="primary">Создать</button>
+        </form>
+        ${projects.map((p,i)=>`
+          <div class="item">${esc(p)}
+            <button data-project-del="${i}">Удалить</button>
+          </div>
+        `).join("")}
+      </section>`;
+  }
+
+  else if(page==="Создание сайтов") {
+    app.innerHTML=`
+      <h2>Создание сайтов</h2>
+      <section class="card">
+        <form id="siteForm">
+          <input id="sn" placeholder="Название сайта" required>
+          <textarea id="sd" placeholder="Описание сайта"></textarea>
+          <button class="primary">Создать проект</button>
+        </form>
+      </section>
+      <section class="card">
+        <h3>Мои сайты</h3>
+        ${sites.map((s,i)=>`
+          <div class="item">
+            <b>${esc(s.name)}</b>
+            <p>${esc(s.desc)}</p>
+            <button data-site-open="${i}">Редактировать</button>
+            <button data-site-del="${i}">Удалить</button>
+          </div>
+        `).join("")}
+      </section>
+      <section class="card" id="editor">
+        <h3>HTML-редактор</h3>
+        <textarea id="code"><!doctype html><html><body><h1>Мой сайт</h1></body></html></textarea>
+        <button class="primary" id="previewBtn">Предпросмотр</button>
+        <iframe title="Предпросмотр сайта" style="width:100%;height:300px;background:white;border-radius:12px" id="preview" sandbox></iframe>
+      </section>`;
+  }
+
+  else if(page==="Приложения и доступ") {
+    app.innerHTML=`
+      <h2>Приложения и доступ</h2>
+      <section class="card">
+        <h3>Микрофон</h3>
+        <p class="muted">Браузер запросит разрешение.</p>
+        <button id="mic">Запросить доступ</button>
+        <p id="status" class="muted"></p>
+      </section>
+      <section class="card">
+        <h3>Выбор файлов</h3>
+        <input id="files" type="file" multiple>
+        <p id="fileStatus"></p>
+      </section>`;
+  }
+
+  else {
+    app.innerHTML=`
+      <h2>${esc(page)}</h2>
+      <section class="card">
+        <p class="muted">Выбери изображение или видео.</p>
+        <input id="media" type="file" accept="image/*,video/*">
+        <div id="mediaPreview"></div>
+      </section>`;
+  }
+}
+
+function newChat() {
+  activeChat=null;
+  go("Новый чат");
+}
+
+function addVoiceLine(role,text) {
+  voiceLines.push({role,text});
+  showVoiceLines();
+}
+
+function pauseVoice() {
+  voiceActive=false;
+  voiceGeneration++;
+
+  const r=voiceRecognition;
+  voiceRecognition=null;
+  if(r) {
+    r.onend=null;
+    try { r.abort(); } catch {}
+  }
+
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+
+  voiceSpeaking=false;
+  $("#orb")?.classList.remove("listening","speaking");
+  $("#voice").textContent="🎙 Продолжить";
+  $("#voiceStop").disabled=false;
+  setStatus("Пауза. Нажми, чтобы продолжить.");
+}
+
+function startVoice() {
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+  if(!SR) {
+    setStatus("Браузер не поддерживает распознавание речи. Попробуй Chrome.");
+    return;
+  }
+
+  voiceActive=true;
+  voiceSpeaking=false;
+  const generation=++voiceGeneration;
+
+  $("#voice").textContent="Ⅱ Приостановить";
+  $("#voiceStop").disabled=false;
+  setStatus("Запускаю микрофон…");
+
+  function listen() {
+    if(!voiceActive || generation!==voiceGeneration) return;
+
+    const r=new SR();
+    voiceRecognition=r;
+    r.lang="ru-RU";
+    r.continuous=false;
+    r.interimResults=false;
+    r.maxAlternatives=1;
+
+    r.onstart=()=>{
+      if(generation!==voiceGeneration) return;
+      setStatus("Слушаю тебя…");
+      $("#orb")?.classList.add("listening");
+      $("#orb")?.classList.remove("speaking");
+    };
+
+    r.onresult=e=>{
+      if(generation!==voiceGeneration) return;
+      const text=e.results[e.results.length-1][0].transcript.trim();
+      if(!text) return;
+
+      addVoiceLine("user",text);
+
+      // Демонстрационный ответ. Здесь позже подключается API ИИ.
+      const answer=makeDemoAnswer(text);
+      addVoiceLine("bot",answer);
+
+      if(!("speechSynthesis" in window)) {
+        setStatus("Ответ показан текстом. Озвучивание не поддерживается.");
+        return;
+      }
+
+      voiceSpeaking=true;
+      setStatus("Роби отвечает…");
+      $("#orb")?.classList.remove("listening");
+      $("#orb")?.classList.add("speaking");
+
+      const utterance=new SpeechSynthesisUtterance(answer);
+      utterance.lang="ru-RU";
+      utterance.rate=1;
+      utterance.pitch=1;
+
+      utterance.onend=()=>{
+        voiceSpeaking=false;
+        if(generation!==voiceGeneration) return;
+
+        $("#orb")?.classList.remove("speaking");
+
+        if(voiceActive) {
+          setStatus("Слушаю тебя…");
+          listen();
+        }
+      };
+
+      utterance.onerror=()=>{
+        voiceSpeaking=false;
+        if(generation!==voiceGeneration) return;
+        $("#orb")?.classList.remove("speaking");
+        if(voiceActive) listen();
+      };
+
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    };
+
+    r.onerror=e=>{
+      if(generation!==voiceGeneration) return;
+      $("#orb")?.classList.remove("listening");
+
+      if(e.error==="not-allowed" || e.error==="service-not-allowed") {
+        setStatus("Разреши доступ к микрофону в настройках браузера.");
+        stopVoice(true);
+        return;
+      }
+
+      if(e.error==="audio-capture") {
+        setStatus("Микрофон не найден. Проверь подключение.");
+        stopVoice(true);
+        return;
+      }
+
+      if(e.error!=="no-speech" && e.error!=="aborted") {
+        setStatus("Ошибка распознавания. Попробуй ещё раз.");
+      }
+    };
+
+    r.onend=()=>{
+      if(voiceRecognition===r) voiceRecognition=null;
+      if(generation!==voiceGeneration || !voiceActive || voiceSpeaking) return;
+      listen();
+    };
+
+    try {
+      r.start();
+    } catch {
+      if(voiceActive) {
+        setStatus("Не удалось запустить микрофон. Попробуй ещё раз.");
+      }
+    }
+  }
+
+  listen();
+}
+
+function makeDemoAnswer(text) {
+  const t=text.toLowerCase();
+
+  if(/привет|здравствуй|добрый день|доброе утро/.test(t)) {
+    return "Привет! Я Роби. Рад тебя слышать. Чем могу помочь?";
+  }
+  if(/как тебя зовут|кто ты/.test(t)) {
+    return "Я Роби, твой цифровой помощник.";
+  }
+  if(/как дела/.test(t)) {
+    return "Спасибо, у меня всё хорошо! О чём поговорим?";
+  }
+  if(/время/.test(t)) {
+    return "Точное время можно посмотреть на твоём устройстве.";
+  }
+  if(/пока|до свидания/.test(t)) {
+    return "До встречи! Буду рад поговорить снова.";
+  }
+
+  return "Я услышал тебя: " + text +
+    ". Пока у меня демонстрационный режим. Чтобы я мог отвечать на любые вопросы, нужно подключить искусственный интеллект.";
+}
+
 $("#menuBtn").onclick=()=>openMenu($("#menu").classList.contains("hidden"));
 $("#shade").onclick=()=>openMenu(false);
 $("#settingsBtn").onclick=()=>go("Настройки Роби");
-$("#menu").addEventListener("click",e=>{let b=e.target.closest("[data-page]");if(b)go(b.dataset.page)});
+
+$("#menu").addEventListener("click",e=>{
+  const b=e.target.closest("[data-page]");
+  if(b) go(b.dataset.page);
+});
 
 $("#app").addEventListener("click",async e=>{
- const b=e.target.closest("button");if(!b)return;
- if(b.id==="newChat")return newChat();
- if(b.dataset.color){glow=b.dataset.color;localStorage.setItem("robi.glow",glow);return render()}
- if(b.dataset.toggle){let f=features.find(x=>x.id===+b.dataset.toggle);if(f)f.on=!f.on;persist();return render()}
- if(b.dataset.del){features=features.filter(x=>x.id!==+b.dataset.del);persist();return render()}
- if(b.dataset.edit){editFeature=+b.dataset.edit;render();return}
- if(b.dataset.cmdDel!==undefined){commands.splice(+b.dataset.cmdDel,1);persist();return render()}
- if(b.dataset.open){activeChat=b.dataset.open;return go("Новый чат")}
- if(b.dataset.chatDel){chats=chats.filter(x=>x.id!==b.dataset.chatDel);persist();return render()}
- if(b.dataset.projectDel!==undefined){projects.splice(+b.dataset.projectDel,1);persist();return render()}
- if(b.dataset.siteDel!==undefined){sites.splice(+b.dataset.siteDel,1);persist();return render()}
- if(b.dataset.siteOpen!==undefined){editSite=+b.dataset.siteOpen;$("#code").value=sites[editSite].code||`<h1>${esc(sites[editSite].name)}</h1><p>${esc(sites[editSite].desc)}</p>`;$("#editor").scrollIntoView();return}
- if(b.id==="previewBtn"){const code=$("#code").value;$("#preview").srcdoc=code;if(editSite!==null&&sites[editSite]){sites[editSite].code=code;persist()}return}
- if(b.id==="mic"){try{let s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());$("#status").textContent="Доступ предоставлен."}catch{$("#status").textContent="Доступ не предоставлен."}return}
- if(b.id==="voice"){voiceInput();return}
-});
-$("#app").addEventListener("submit",async e=>{
- e.preventDefault();
- if(e.target.id==="featureForm"){
-  let name=$("#fn").value.trim(),desc=$("#fd").value.trim();
-  if(editFeature){let f=features.find(x=>x.id===editFeature);if(f){f.name=name;f.desc=desc}editFeature=null}
-  else features.push({id:Date.now(),name,desc,on:true});
-  persist();render();
- }
- if(e.target.id==="commandForm"){commands.unshift($("#cmd").value.trim());persist();render()}
- if(e.target.id==="projectForm"){projects.unshift($("#pn").value.trim());persist();render()}
- if(e.target.id==="siteForm"){sites.unshift({name:$("#sn").value.trim(),desc:$("#sd").value.trim(),code:""});editSite=0;persist();render()}
- if(e.target.id==="chatForm"){
-  let c=chats.find(x=>x.id===activeChat),text=$("#msg").value.trim();if(!c||!text)return;
-  c.messages.push({role:"user",text});
-  c.name=c.messages.length===1?text.slice(0,30):c.name;
-  persist();render();
- }
-});
-function voiceInput(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR){$("#voiceStatus").textContent="Распознавание речи не поддерживается этим браузером.";return}
- const r=new SR();r.lang="ru-RU";
- r.onstart=()=>$("#voiceStatus").textContent="Слушаю…";
- r.onresult=e=>{
-  const text=e.results[0][0].transcript;
-  $("#transcript").textContent="Ты сказал: "+text;
-  const orb=$("#orb");orb?.classList.add("speaking");
-  if("speechSynthesis"in window){let u=new SpeechSynthesisUtterance("Я услышал: "+text);u.lang="ru-RU";u.onend=()=>orb?.classList.remove("speaking");speechSynthesis.speak(u)}
- };
- r.onerror=()=>$("#voiceStatus").textContent="Не удалось распознать речь.";
- try{r.start()}catch{$("#voiceStatus").textContent="Попробуй ещё раз."}
-}
-$("#app").addEventListener("change",e=>{
- if(e.target.id==="files")$("#fileStatus").textContent=[...e.target.files].map(f=>f.name).join(", ");
- if(e.target.id==="media"&&e.target.files[0]){
-  let f=e.target.files[0],url=URL.createObjectURL(f);
-  $("#mediaPreview").innerHTML=f.type.startsWith("image/")?`<img alt="Предпросмотр" src="${url}" style="max-width:100%">`:`<video controls src="${url}" style="max-width:100%"></video>`;
- }
-});
-render();
-</script>
-</body>
-</html>
+  const b=e.target.closest("button");
+  if(!b) return;
+
+  if(b.id==="newChat") return newChat();
+  if(b.id==="openVoice") return go("Голосовой чат");
+  if(b.id==="voice") return voiceActive?pauseVoice():startVoice();
+  if(b.id==="voiceStop") return stopVoice();
+
+  if(b.dataset.color) {
+    glow=b.dataset.color;
+    localStorage.setItem("robi.glow",glow);
+    retu
+
